@@ -8,9 +8,9 @@ import categoriesExistsValidation from "../middlewares/categoriesExistsValidatio
 
 const router = Router();
 
-router.get("/categories", getCategories);
+router.get("/", getCategories);
 router.post(
-    "/categories",
+    "/",
     categoriesBodyValidation,
     categoriesExistsValidation,
     postCategory

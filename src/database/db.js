@@ -2,8 +2,8 @@ import pkg from "pg";
 import dotenv from "dotenv";
 dotenv.config();
 
-const connection = new pkg.Pool({
+const connectionDB = new pkg.Pool({
     connectionString: process.env.DATABASE_URL,
 });
 
-export default connection;
+export default connectionDB;

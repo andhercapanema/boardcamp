@@ -5,6 +5,12 @@ const { getAllCategories, postNewCategory } = CategoriesRepository;
 export async function getCategories(req, res) {
     try {
         const categories = await getAllCategories();
+
+        if (categories.length === 0)
+            return res
+                .status(404)
+                .send({ message: "Nenhuma categoria cadastrada!" });
+
         res.send(categories);
     } catch (err) {
         console.error(err);
