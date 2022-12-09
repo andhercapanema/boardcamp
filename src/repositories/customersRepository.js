@@ -19,10 +19,35 @@ const CustomersRepository = {
             FROM
                 customers
             WHERE
-                cpf=$1
+                cpf=$1;
             `,
             [cpf]
         );
+    },
+    getAllCustomers: async () => {
+        const customers = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                customers;
+            `
+        );
+        return customers.rows;
+    },
+    getCustomersByCpf: async (cpf) => {
+        const filteredCustomers = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                customers
+            WHERE
+                cpf
+            LIKE
+                $1 || '%';
+            `,
+            [cpf]
+        );
+        return filteredCustomers.rows;
     },
 };
 

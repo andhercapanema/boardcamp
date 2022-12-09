@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { postCustomer } from "../controllers/customersControllers.js";
+import {
+    getCustomers,
+    postCustomer,
+} from "../controllers/customersControllers.js";
 import customerBodyValidation from "../middlewares/customerMiddlewares/customerBodyValidationMiddleware.js";
 import customerCpfExistsValidation from "../middlewares/customerMiddlewares/customerCpfExistsValidationMiddleware.js";
 
@@ -11,5 +14,6 @@ router.post(
     customerCpfExistsValidation,
     postCustomer
 );
+router.get("/", getCustomers);
 
 export default router;
