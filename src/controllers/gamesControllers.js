@@ -1,11 +1,18 @@
 import GamesRepository from "../repos/gamesRepository.js";
 
-const { getAllGames, postNewCategory } = GamesRepository;
+const { getAllGames, postNewCategory, getGameByNameCaseInsensitive } =
+    GamesRepository;
 
 export async function getGames(req, res) {
     const { name } = req.query;
 
     try {
+        if (name !== undefined) {
+            const filteredGames = await getGameByNameCaseInsensitive(name);
+
+            return res.send(filteredGames);
+        }
+
         const games = await getAllGames();
 
         if (games.length === 0)
