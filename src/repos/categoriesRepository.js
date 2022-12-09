@@ -19,6 +19,13 @@ const CategoriesRepository = {
         );
         return category;
     },
+    getCategoryById: async (id) => {
+        const category = await connectionDB.query(
+            "SELECT * FROM categories WHERE id=$1;",
+            [id]
+        );
+        return category;
+    },
 };
 
 export default CategoriesRepository;

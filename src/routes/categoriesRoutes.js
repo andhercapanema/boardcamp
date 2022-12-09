@@ -3,16 +3,16 @@ import {
     getCategories,
     postCategory,
 } from "../controllers/categoriesControllers.js";
-import categoriesBodyValidation from "../middlewares/categoriesBodyValidationMiddleware.js";
-import categoriesExistsValidation from "../middlewares/categoriesExistsValidationMiddleware.js";
+import categoryBodyValidation from "../middlewares/categoryBodyValidationMiddleware.js";
+import categoryNameExistsValidation from "../middlewares/categoriyNameExistsValidationMiddleware.js";
 
 const router = Router();
 
 router.get("/", getCategories);
 router.post(
     "/",
-    categoriesBodyValidation,
-    categoriesExistsValidation,
+    categoryBodyValidation,
+    categoryNameExistsValidation,
     postCategory
 );
 
