@@ -3,8 +3,8 @@ import {
     getCategories,
     postCategory,
 } from "../controllers/categoriesControllers.js";
-import categoryBodyValidation from "../middlewares/categoryBodyValidationMiddleware.js";
-import categoryNameExistsValidation from "../middlewares/categoriyNameExistsValidationMiddleware.js";
+import categoryBodyValidation from "../middlewares/categoryMiddlewares/categoryBodyValidationMiddleware.js";
+import categoryNameExistsValidation from "../middlewares/categoryMiddlewares/categoryNameExistsValidationMiddleware.js";
 
 const router = Router();
 

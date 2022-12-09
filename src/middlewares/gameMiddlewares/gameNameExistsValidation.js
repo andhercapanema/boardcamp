@@ -1,4 +1,4 @@
-import GamesRepository from "../repos/gamesRepository.js";
+import GamesRepository from "../../repositories/gamesRepository.js";
 
 export default async function gameNameExistsValidation(req, res, next) {
     const { name } = res.locals.newCategory;

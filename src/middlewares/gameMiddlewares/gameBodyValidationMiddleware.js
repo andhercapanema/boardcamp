@@ -1,4 +1,4 @@
-import gamesSchema from "../models/gamesModel.js";
+import gamesSchema from "../../models/gamesModel.js";
 
 export default function gameBodyValidation(req, res, next) {
     const { name, image, stockTotal, categoryId, pricePerDay } = req.body;

@@ -1,4 +1,4 @@
-import categoriesSchema from "../models/categoriesModel.js";
+import categoriesSchema from "../../models/categoriesModel.js";
 
 export default function categoryBodyValidation(req, res, next) {
     const { name } = req.body;

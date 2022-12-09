@@ -1,4 +1,4 @@
-import CategoriesRepository from "../repos/categoriesRepository.js";
+import CategoriesRepository from "../repositories/categoriesRepository.js";
 
 const { getAllCategories, postNewCategory } = CategoriesRepository;
 

@@ -1,4 +1,4 @@
-import CategoriesRepository from "../repos/categoriesRepository.js";
+import CategoriesRepository from "../../repositories/categoriesRepository.js";
 
 export default async function categoryNameExistsValidation(req, res, next) {
     const { name } = res.locals;

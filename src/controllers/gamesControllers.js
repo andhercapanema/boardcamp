@@ -1,4 +1,4 @@
-import GamesRepository from "../repos/gamesRepository.js";
+import GamesRepository from "../repositories/gamesRepository.js";
 
 const { getAllGames, postNewCategory, getGameByNameCaseInsensitive } =
     GamesRepository;
