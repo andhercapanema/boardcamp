@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+    getCustomerById,
     getCustomers,
     postCustomer,
 } from "../controllers/customersControllers.js";
@@ -15,5 +16,6 @@ router.post(
     postCustomer
 );
 router.get("/", getCustomers);
+router.get("/:id", getCustomerById);
 
 export default router;

@@ -49,6 +49,19 @@ const CustomersRepository = {
         );
         return filteredCustomers.rows;
     },
+    getCustomerByCpfFromDb: async (id) => {
+        const customer = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                customers
+            WHERE
+                id = $1;
+            `,
+            [id]
+        );
+        return customer.rows[0];
+    },
 };
 
 export default CustomersRepository;
