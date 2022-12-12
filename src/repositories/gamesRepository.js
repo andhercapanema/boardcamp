@@ -55,6 +55,36 @@ const GamesRepository = {
         );
         return foundGames.rows;
     },
+    getGameById: async (id) => {
+        const game = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                games
+            WHERE
+                id = $1;
+            `,
+            [id]
+        );
+        return game.rows[0];
+    },
+    getGamesByRentals: async (gameId) => {
+        const games = await connectionDB.query(
+            `SELECT
+                games.id, games."stockTotal"
+            FROM
+                games
+            JOIN
+                rentals
+            ON
+                games.id = rentals."gameId"
+            WHERE
+                games.id = $1;
+            `,
+            [gameId]
+        );
+        return games;
+    },
 };
 
 export default GamesRepository;

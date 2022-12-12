@@ -49,7 +49,7 @@ const CustomersRepository = {
         );
         return filteredCustomers.rows;
     },
-    getCustomerByCpfFromDb: async (id) => {
+    getCustomerByIdFromDb: async (id) => {
         const customer = await connectionDB.query(
             `SELECT
                 *

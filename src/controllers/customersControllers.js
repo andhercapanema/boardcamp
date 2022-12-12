@@ -5,7 +5,7 @@ const {
     postNewCustomer,
     getAllCustomers,
     getCustomersByCpf,
-    getCustomerByCpfFromDb,
+    getCustomerByIdFromDb,
     updateCustomer,
 } = CustomersRepository;
 
@@ -25,7 +25,8 @@ export async function getCustomers(req, res) {
     const { cpf } = req.query;
 
     try {
-        if (cpf !== undefined) return res.send(await getCustomersByCpf(cpf));
+        if (cpf !== undefined)
+            return res.send(await getCustomerByIdFromDb(cpf));
 
         const customers = await getAllCustomers();
 
@@ -45,7 +46,7 @@ export async function getCustomerById(req, res) {
     const { id } = req.params;
 
     try {
-        const customer = await getCustomerByCpfFromDb(id);
+        const customer = await getCustomerById(id);
 
         if (customer === undefined) return res.sendStatus(404);
 
