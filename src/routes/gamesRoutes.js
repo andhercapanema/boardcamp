@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getGames, postGame } from "../controllers/gamesControllers.js";
 import gameBodyValidation from "../middlewares/gameMiddlewares/gameBodyValidationMiddleware.js";
 import categoryIdExistsValidation from "../middlewares/categoryMiddlewares/categoryIdExistsValidationMiddleware.js";
-import gameNameExistsValidation from "../middlewares/gameMiddlewares/gameNameExistsValidation.js";
+import gameNameExistsValidation from "../middlewares/gameMiddlewares/gameNameExistsValidationMiddleware.js";
 
 const router = Router();
 

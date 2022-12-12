@@ -9,6 +9,8 @@ const {
     getRentalsByCustomerId,
     getRentalsByGameId,
     getRentalsByCustomerAndGameId,
+    updateRentalReturnDate,
+    updateRentalDelayFee,
 } = RentalsRepository;
 
 export async function postRental(req, res) {
@@ -62,6 +64,20 @@ export async function getRentals(req, res) {
         }
 
         res.send(formattedCustomers);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function returnGame(req, res) {
+    const { id } = req.params;
+
+    try {
+        // await updateRentalReturnDate(id);
+        // await updateRentalDelayFee(id);
+
+        res.send();
     } catch (err) {
         console.error(err);
         res.sendStatus(500);

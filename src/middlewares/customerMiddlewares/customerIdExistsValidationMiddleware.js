@@ -8,7 +8,13 @@ export default async function customerIdExistsValidation(req, res, next) {
             customerId
         );
 
-        if (customer === undefined) return res.sendStatus(400);
+        if (customer === undefined)
+            return res
+                .status(400)
+                .send({
+                    message:
+                        "Não existe nenhum cliente com esse ID, favor inserir outro!",
+                });
     } catch (err) {
         console.error(err);
         res.sendStatus(500);

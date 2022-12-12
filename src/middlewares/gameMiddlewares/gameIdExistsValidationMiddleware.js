@@ -6,7 +6,13 @@ export default async function gameIdExistsValidation(req, res, next) {
     try {
         const game = await GamesRepository.getGameById(gameId);
 
-        if (game === undefined) return res.sendStatus(400);
+        if (game === undefined)
+            return res
+                .status(400)
+                .send({
+                    message:
+                        "Não existe nenhum jogo com esse ID, favor inserir outro!",
+                });
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
