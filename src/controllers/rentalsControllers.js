@@ -11,6 +11,7 @@ const {
     getRentalsByCustomerAndGameId,
     updateRentalReturnDate,
     updateRentalDelayFee,
+    deleteSpecificRental,
 } = RentalsRepository;
 
 export async function postRental(req, res) {
@@ -74,8 +75,21 @@ export async function returnGame(req, res) {
     const { id } = req.params;
 
     try {
-        // await updateRentalReturnDate(id);
-        // await updateRentalDelayFee(id);
+        await updateRentalReturnDate(id);
+        await updateRentalDelayFee(id);
+
+        res.send();
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function deleteRental(req, res) {
+    const { id } = req.params;
+
+    try {
+        // await deleteSpecificRental(id);
 
         res.send();
     } catch (err) {

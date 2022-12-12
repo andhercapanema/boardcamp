@@ -115,6 +115,15 @@ const RentalsRepository = {
             [delayFee, id]
         );
     },
+    deleteSpecificRental: async (id) => {
+        await connectionDB.query(
+            `DELETE FROM
+                rentals
+            WHERE
+                id=$1`,
+            [id]
+        );
+    },
 };
 
 export default RentalsRepository;

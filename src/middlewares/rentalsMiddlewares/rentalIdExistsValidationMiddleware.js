@@ -6,12 +6,10 @@ export default async function rentalIdExistsValidation(req, res, next) {
     const rental = await RentalsRepository.getRentalById(id);
 
     if (rental === undefined)
-        return res
-            .status(404)
-            .send({
-                message:
-                    "O ID inserido não corresponde a nenhuma locação, favor inserir outro!",
-            });
+        return res.status(404).send({
+            message:
+                "O ID inserido não corresponde a nenhuma locação, favor inserir outro!",
+        });
 
     next();
 }

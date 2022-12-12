@@ -10,19 +10,12 @@ import customerCpfExistsValidation from "../middlewares/customerMiddlewares/cust
 
 const router = Router();
 
-router.post(
-    "/",
-    customerBodyValidation,
-    customerCpfExistsValidation,
-    postCustomer
-);
 router.get("/", getCustomers);
 router.get("/:id", getCustomerById);
-router.put(
-    "/:id",
-    customerBodyValidation,
-    customerCpfExistsValidation,
-    putCustomer
-);
+
+router.use(customerBodyValidation, customerCpfExistsValidation);
+
+router.post("/", postCustomer);
+router.put("/:id", putCustomer);
 
 export default router;

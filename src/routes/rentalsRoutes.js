@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+    deleteRental,
     getRentals,
     postRental,
     returnGame,
@@ -10,6 +11,7 @@ import rentalAvailableGameValidation from "../middlewares/rentalsMiddlewares/ren
 import rentalBodyValidation from "../middlewares/rentalsMiddlewares/rentalBodyValidationMiddleware.js";
 import rentalIdExistsValidation from "../middlewares/rentalsMiddlewares/rentalIdExistsValidationMiddleware.js";
 import rentalWasNotReturnedValidation from "../middlewares/rentalsMiddlewares/rentalWasNotReturnedValidationMiddleware.js";
+import rentalWasReturnedValidation from "../middlewares/rentalsMiddlewares/rentalWasReturnedValidationMiddleware.js";
 
 const router = Router();
 
@@ -22,11 +24,10 @@ router.post(
     postRental
 );
 router.get("/", getRentals);
-router.post(
-    "/:id/return",
-    rentalIdExistsValidation,
-    rentalWasNotReturnedValidation,
-    returnGame
-);
+
+router.use("/:id", rentalIdExistsValidation);
+
+router.post("/:id/return", rentalWasNotReturnedValidation, returnGame);
+router.delete("/:id", rentalWasReturnedValidation, deleteRental);
 
 export default router;
