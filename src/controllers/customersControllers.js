@@ -25,17 +25,20 @@ export async function getCustomers(req, res) {
     const { cpf } = req.query;
 
     try {
-        if (cpf !== undefined)
-            return res.send(await getCustomerByIdFromDb(cpf));
+        let customers = [];
 
-        const customers = await getAllCustomers();
+        if (cpf === undefined) {
+            customers = await getAllCustomers();
+        } else {
+            customers = await getCustomersByCpf(cpf);
+        }
 
-        res.send(
-            customers.map((customer) => ({
-                ...customer,
-                birthday: format(customer.birthday, "yyyy-MM-dd"),
-            }))
-        );
+        const formattedCustomer = customers.map((customer) => ({
+            ...customer,
+            birthday: format(customer.birthday, "yyyy-MM-dd"),
+        }));
+
+        res.send(formattedCustomer);
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
@@ -46,7 +49,7 @@ export async function getCustomerById(req, res) {
     const { id } = req.params;
 
     try {
-        const customer = await getCustomerById(id);
+        const customer = await getCustomerByIdFromDb(id);
 
         if (customer === undefined) return res.sendStatus(404);
 
@@ -68,7 +71,7 @@ export async function putCustomer(req, res) {
 
     try {
         await updateCustomer(id, updatedCustomer);
-        res.sendStatus(200);
+        res.send();
     } catch (err) {
         console.error(err);
         res.sendStatus(500);

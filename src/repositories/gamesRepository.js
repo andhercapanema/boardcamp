@@ -85,6 +85,23 @@ const GamesRepository = {
         );
         return games;
     },
+    getGameByIdNameIdCategoryIdCategoryName: async (id) => {
+        const game = await connectionDB.query(
+            `SELECT
+                g.id, g.name, g."categoryId", c."name" AS "categoryName"
+            FROM 
+                games AS g
+            JOIN
+                categories AS c
+            ON
+                g."categoryId" = c.id
+            WHERE
+                g.id = $1;
+            `,
+            [id]
+        );
+        return game.rows[0];
+    },
 };
 
 export default GamesRepository;

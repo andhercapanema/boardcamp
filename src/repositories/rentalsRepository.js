@@ -27,6 +27,54 @@ const RentalsRepository = {
             ]
         );
     },
+    getAllRentals: async () => {
+        const rentals = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                rentals;`
+        );
+        return rentals.rows;
+    },
+    getRentalsByCustomerId: async (customerId) => {
+        const rentals = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                rentals
+            WHERE
+                "customerId" = $1;
+            `,
+            [customerId]
+        );
+        return rentals.rows;
+    },
+    getRentalsByGameId: async (gameId) => {
+        const rentals = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                rentals
+            WHERE
+                "gameId" = $1;
+            `,
+            [gameId]
+        );
+        return rentals.rows;
+    },
+    getRentalsByCustomerAndGameId: async (customerId, gameId) => {
+        const rentals = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                rentals
+            WHERE
+                "customerId" = $1 AND "gameId" = $2;
+            `,
+            [customerId, gameId]
+        );
+        return rentals.rows;
+    },
 };
 
 export default RentalsRepository;

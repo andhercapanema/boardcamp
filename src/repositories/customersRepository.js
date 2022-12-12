@@ -74,6 +74,19 @@ const CustomersRepository = {
             [name, phone, cpf, birthday, id]
         );
     },
+    getCustomerByIdNameAndId: async (id) => {
+        const customer = await connectionDB.query(
+            `SELECT
+                id, name
+            FROM
+                customers
+            WHERE
+                id = $1;
+            `,
+            [id]
+        );
+        return customer.rows[0];
+    },
 };
 
 export default CustomersRepository;
