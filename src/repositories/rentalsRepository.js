@@ -50,6 +50,7 @@ const RentalsRepository = {
         }
 
         const formattedOrder = `"${order}"`;
+        const orderBy = order ? `ORDER BY ${formattedOrder}` : "";
 
         const rentals = await connectionDB.query(
             `SELECT
@@ -59,7 +60,7 @@ const RentalsRepository = {
             WHERE
                 "rentDate" >= $3
             ${customerAndGameFilter}
-            ${order ? `ORDER BY ${formattedOrder}` : ""}
+            ${orderBy}
             ${desc ? "DESC" : ""}
             LIMIT
                 $1
@@ -147,13 +148,16 @@ const RentalsRepository = {
         game,
         customer,
     }) => {
+        const gameWhere = game ? `"gameId" = ${game}` : true;
+        const customerWhere = customer ? `"customerId" = ${customer}` : true;
+
         const amount = await connectionDB.query(
             `SELECT COUNT(id)
             FROM rentals
             WHERE "rentDate" >= $1
             AND "rentDate" <= $2
-            AND ${game ? `"gameId" = ${game}` : 1 === 1}
-            AND ${customer ? `"customerId" = ${customer}` : 1 === 1};`,
+            AND ${gameWhere}
+            AND ${customerWhere};`,
             [startDate, endDate]
         );
         return Number(amount.rows[0].count);

@@ -26,11 +26,11 @@ export async function getCustomers(req, res) {
 
     try {
         const customers = await getAllCustomersByFilters(
-            cpf,
             offset,
             limit,
             order,
-            desc
+            desc,
+            cpf
         );
 
         const formattedCustomer = [];

@@ -1,8 +1,9 @@
 import connectionDB from "../database/db.js";
 
 const GamesRepository = {
-    getAllGamesByFilters: async (name = "", offset, limit, order, desc) => {
+    getAllGamesByFilters: async (offset, limit, order, desc, name = "") => {
         const formattedOrder = `"${order}"`;
+        const orderBy = order ? `ORDER BY ${formattedOrder}` : "";
 
         const foundGames = await connectionDB.query(
             `SELECT
@@ -13,7 +14,7 @@ const GamesRepository = {
                 name
             ILIKE
                 '%' || $1 || '%'
-            ${order ? `ORDER BY ${formattedOrder}` : ""}
+            ${orderBy}
             ${desc ? "DESC" : ""}
             LIMIT
                 $2

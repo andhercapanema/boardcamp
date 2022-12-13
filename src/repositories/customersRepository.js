@@ -11,7 +11,9 @@ const CustomersRepository = {
             [name, phone, cpf, birthday]
         );
     },
-    getAllCustomersByFilters: async (cpf = "", offset, limit, order, desc) => {
+    getAllCustomersByFilters: async (offset, limit, order, desc, cpf = "") => {
+        const orderBy = order ? `ORDER BY ${order}` : "";
+
         const filteredCustomers = await connectionDB.query(
             `SELECT
                 *
@@ -21,7 +23,7 @@ const CustomersRepository = {
                 cpf
             LIKE
                 $1 || '%'
-            ${order ? `ORDER BY ${order}` : ""}
+            ${orderBy}
             ${desc ? "DESC" : ""}
             LIMIT
                 $2
@@ -32,7 +34,7 @@ const CustomersRepository = {
         return filteredCustomers.rows;
     },
     getCustomerByCpf: async (cpf) => {
-        return await connectionDB.query(
+        return connectionDB.query(
             `SELECT
                 *
             FROM

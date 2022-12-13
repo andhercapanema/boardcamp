@@ -8,11 +8,11 @@ export async function getGames(req, res) {
 
     try {
         const games = await getAllGamesByFilters(
-            name,
             offset,
             limit,
             order,
-            desc
+            desc,
+            name
         );
 
         if (games.length === 0)

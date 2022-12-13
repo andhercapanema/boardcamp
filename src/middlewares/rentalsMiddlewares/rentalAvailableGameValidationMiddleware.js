@@ -1,5 +1,4 @@
 import GamesRepository from "../../repositories/gamesRepository.js";
-import RentalsRepository from "../../repositories/rentalsRepository.js";
 
 export default async function rentalAvailableGameValidation(req, res, next) {
     const { gameId } = req.body;
