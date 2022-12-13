@@ -5,10 +5,7 @@ import { format } from "date-fns";
 
 const {
     postNewRental,
-    getAllRentals,
-    getRentalsByCustomerId,
-    getRentalsByGameId,
-    getRentalsByCustomerAndGameId,
+    getAllRentalsByFilters,
     updateRentalReturnDate,
     updateRentalDelayFee,
     deleteSpecificRental,
@@ -27,27 +24,15 @@ export async function postRental(req, res) {
 }
 
 export async function getRentals(req, res) {
-    const { customerId, gameId } = req.query;
+    const { customerId, gameId, offset, limit } = req.query;
 
     try {
-        let rentals = [];
-
-        if (customerId === undefined) {
-            if (gameId === undefined) {
-                rentals = await getAllRentals();
-            } else {
-                rentals = await getRentalsByGameId(gameId);
-            }
-        } else {
-            if (gameId === undefined) {
-                rentals = await getRentalsByCustomerId(customerId);
-            } else {
-                rentals = await getRentalsByCustomerAndGameId(
-                    customerId,
-                    gameId
-                );
-            }
-        }
+        const rentals = await getAllRentalsByFilters(
+            customerId,
+            gameId,
+            offset,
+            limit
+        );
 
         const formattedCustomers = [];
 
@@ -78,7 +63,7 @@ export async function returnGame(req, res) {
         await updateRentalReturnDate(id);
         await updateRentalDelayFee(id);
 
-        res.send();
+        res.sendStatus(200);
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
@@ -89,8 +74,7 @@ export async function deleteRental(req, res) {
     const { id } = req.params;
 
     try {
-        // await deleteSpecificRental(id);
-
+        await deleteSpecificRental(id);
         res.send();
     } catch (err) {
         console.error(err);

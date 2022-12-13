@@ -3,8 +3,8 @@ import CustomersRepository from "../../repositories/customersRepository.js";
 export default async function customerCpfExistsValidation(req, res, next) {
     const { cpf } = res.locals.newCustomer;
     const id = req.params.id || -1;
-    const methodIsPost = req.route.methods.post !== undefined;
-    const methodIsPut = req.route.methods.put !== undefined;
+    const methodIsPost = req.route?.methods.post !== undefined;
+    const methodIsPut = req.route?.methods.put !== undefined;
 
     try {
         const customer = await CustomersRepository.getCustomerByCpf(cpf);

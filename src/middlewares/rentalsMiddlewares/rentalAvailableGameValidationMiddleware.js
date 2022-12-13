@@ -7,10 +7,13 @@ export default async function rentalAvailableGameValidation(req, res, next) {
     try {
         const rentals = await GamesRepository.getGamesByRentals(gameId);
 
-        const currentRentals = rentals.rowCount;
-        const gameStockTotal = rentals.rows[0].stockTotal;
+        const currentRentals = rentals.rows.filter(
+            (rental) => rental?.returnDate === null
+        ).length;
 
-        const availableGames = gameStockTotal - currentRentals;
+        const game = await GamesRepository.getGameById(gameId);
+
+        const availableGames = game.stockTotal - currentRentals;
 
         if (availableGames < 1)
             return res.status(400).send({
