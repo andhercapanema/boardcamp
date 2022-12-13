@@ -7,8 +7,7 @@ const CategoriesRepository = {
                 *
             FROM
                 categories
-            ORDER BY
-                ${order}
+            ${order ? `ORDER BY ${order}` : ""}
             ${desc ? "DESC" : ""}
             LIMIT
                 $1

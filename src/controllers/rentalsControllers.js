@@ -24,7 +24,16 @@ export async function postRental(req, res) {
 }
 
 export async function getRentals(req, res) {
-    const { customerId, gameId, offset, limit, order, desc } = req.query;
+    const {
+        customerId,
+        gameId,
+        offset,
+        limit,
+        order,
+        desc,
+        status,
+        startDate,
+    } = req.query;
 
     try {
         const rentals = await getAllRentalsByFilters(
@@ -33,12 +42,22 @@ export async function getRentals(req, res) {
             offset,
             limit,
             order,
-            desc
+            desc,
+            startDate
+        );
+
+        const handleStatus = {
+            open: (returnStatus) => returnStatus === null,
+            closed: (returnStatus) => returnStatus !== null,
+            undefined: () => true,
+        };
+        const filteredRentals = rentals.filter((rental) =>
+            handleStatus[status](rental.returnDate)
         );
 
         const formattedCustomers = [];
 
-        for (const rental of rentals) {
+        for (const rental of filteredRentals) {
             formattedCustomers.push({
                 ...rental,
                 rentDate: format(rental.rentDate, "yyyy-MM-dd"),

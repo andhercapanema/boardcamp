@@ -32,20 +32,21 @@ const RentalsRepository = {
         offset,
         limit,
         order,
-        desc
+        desc,
+        startDate
     ) => {
-        let whereFilter = ``;
-        let whereArr = [];
+        let customerAndGameFilter = ``;
+        let customerAndGameArr = [];
 
         if (customerId && gameId) {
-            whereFilter = ` WHERE "customerId" = $3 AND "gameId" = $4 `;
-            whereArr = [customerId, gameId];
+            customerAndGameFilter = ` AND "customerId" = $4 AND "gameId" = $5 `;
+            customerAndGameArr = [customerId, gameId];
         } else if (customerId) {
-            whereFilter = ` WHERE "customerId" = $3 `;
-            whereArr = [customerId];
+            customerAndGameFilter = ` AND "customerId" = $4 `;
+            customerAndGameArr = [customerId];
         } else if (gameId) {
-            whereFilter = ` WHERE "gameId" = $3 `;
-            whereArr = [gameId];
+            customerAndGameFilter = ` AND "gameId" = $4 `;
+            customerAndGameArr = [gameId];
         }
 
         const formattedOrder = `"${order}"`;
@@ -55,15 +56,16 @@ const RentalsRepository = {
                 *
             FROM
                 rentals
-            ${whereFilter}
-            ORDER BY
-                ${formattedOrder}
+            WHERE
+                "rentDate" >= $3
+            ${customerAndGameFilter}
+            ${order ? `ORDER BY ${formattedOrder}` : ""}
             ${desc ? "DESC" : ""}
             LIMIT
                 $1
             OFFSET
                 $2;`,
-            [limit, offset, ...whereArr]
+            [limit, offset, startDate, ...customerAndGameArr]
         );
         return rentals.rows;
     },

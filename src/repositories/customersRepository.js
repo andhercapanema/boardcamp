@@ -21,8 +21,7 @@ const CustomersRepository = {
                 cpf
             LIKE
                 $1 || '%'
-            ORDER BY
-                ${order}
+            ${order ? `ORDER BY ${order}` : ""}
             ${desc ? "DESC" : ""}
             LIMIT
                 $2

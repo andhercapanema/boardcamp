@@ -22,8 +22,7 @@ const GamesRepository = {
                 name
             ILIKE
                 '%' || $1 || '%'
-            ORDER BY
-                ${formattedOrder}
+            ${order ? `ORDER BY ${formattedOrder}` : ""}
             ${desc ? "DESC" : ""}
             LIMIT
                 $2
