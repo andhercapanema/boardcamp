@@ -115,12 +115,43 @@ const RentalsRepository = {
     },
     deleteSpecificRental: async (id) => {
         await connectionDB.query(
-            `DELETE FROM
-                rentals
-            WHERE
-                id=$1;`,
+            `DELETE FROM rentals
+            WHERE id=$1;`,
             [id]
         );
+    },
+    getTotalRevenue: async (
+        startDate = "1900-01-01",
+        endDate = "2100-12-31"
+    ) => {
+        const originalRevenue = await connectionDB.query(
+            `SELECT SUM ("originalPrice")
+            FROM rentals
+            WHERE "rentDate" >= $1 AND "rentDate" <= $2;`,
+            [startDate, endDate]
+        );
+        const delayRevenue = await connectionDB.query(
+            `SELECT SUM ("delayFee")
+            FROM rentals
+            WHERE "rentDate" >= $1 AND "rentDate" <= $2;`,
+            [startDate, endDate]
+        );
+        return (
+            Number(originalRevenue.rows[0].sum) +
+            Number(delayRevenue.rows[0].sum)
+        );
+    },
+    getRentalsAmount: async (
+        startDate = "1900-01-01",
+        endDate = "2100-12-31"
+    ) => {
+        const amount = await connectionDB.query(
+            `SELECT COUNT(id)
+            FROM rentals
+            WHERE "rentDate" >= $1 AND "rentDate" <= $2;`,
+            [startDate, endDate]
+        );
+        return Number(amount.rows[0].count);
     },
 };
 

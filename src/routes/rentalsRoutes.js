@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     deleteRental,
     getRentals,
+    getRentalsMetrics,
     postRental,
     returnGame,
 } from "../controllers/rentalsControllers.js";
@@ -24,7 +25,7 @@ router.post(
     postRental
 );
 router.get("/", getRentals);
-
+router.get("/metrics", getRentalsMetrics);
 router.use("/:id", rentalIdExistsValidation);
 
 router.post("/:id/return", rentalWasNotReturnedValidation, returnGame);

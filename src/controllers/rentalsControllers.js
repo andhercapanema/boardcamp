@@ -9,6 +9,8 @@ const {
     updateRentalReturnDate,
     updateRentalDelayFee,
     deleteSpecificRental,
+    getTotalRevenue,
+    getRentalsAmount,
 } = RentalsRepository;
 
 export async function postRental(req, res) {
@@ -97,6 +99,24 @@ export async function deleteRental(req, res) {
     try {
         await deleteSpecificRental(id);
         res.send();
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}
+
+export async function getRentalsMetrics(req, res) {
+    const { startDate, endDate } = req.query;
+
+    try {
+        const revenue = await getTotalRevenue(startDate, endDate);
+        const rentals = await getRentalsAmount(startDate, endDate);
+
+        res.send({
+            revenue,
+            rentals,
+            average: revenue / rentals,
+        });
     } catch (err) {
         console.error(err);
         res.sendStatus(500);
