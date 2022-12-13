@@ -1,35 +1,17 @@
 import CategoriesRepository from "../repositories/categoriesRepository.js";
 
-const {
-    getAllCategories,
-    postNewCategory,
-    getAllCategoriesOffset,
-    getAllCategoriesLimit,
-    getAllCategoriesOffsetAndLimit,
-} = CategoriesRepository;
+const { postNewCategory, getAllCategoriesByFilter } = CategoriesRepository;
 
 export async function getCategories(req, res) {
-    const { offset, limit } = req.query;
+    const { limit, offset, order, desc } = req.query;
 
     try {
-        let categories = [];
-
-        if (offset === undefined) {
-            if (limit === undefined) {
-                categories = await getAllCategories();
-            } else {
-                categories = await getAllCategoriesLimit(limit);
-            }
-        } else {
-            if (limit === undefined) {
-                categories = await getAllCategoriesOffset(offset);
-            } else {
-                categories = await getAllCategoriesOffsetAndLimit(
-                    offset,
-                    limit
-                );
-            }
-        }
+        const categories = await getAllCategoriesByFilter(
+            limit,
+            offset,
+            order,
+            desc
+        );
 
         if (categories.length === 0)
             return res

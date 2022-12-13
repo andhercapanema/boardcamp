@@ -1,6 +1,7 @@
 import GamesRepository from "../repositories/gamesRepository.js";
 
 const {
+    getAllGamesByFilters,
     getAllGames,
     postNewCategory,
     getGameByNameCaseInsensitive,
@@ -13,10 +14,18 @@ const {
 } = GamesRepository;
 
 export async function getGames(req, res) {
-    const { name, offset, limit } = req.query;
+    const { name, offset, limit, order, desc } = req.query;
 
     try {
-        if (name !== undefined) {
+        const games = await getAllGamesByFilters(
+            name,
+            offset,
+            limit,
+            order,
+            desc
+        );
+
+        /* if (name !== undefined) {
             let filteredGames = [];
 
             if (offset === undefined) {
@@ -63,7 +72,7 @@ export async function getGames(req, res) {
             } else {
                 games = await getAllGamesOffsetAndLimit(offset, limit);
             }
-        }
+        } */
 
         if (games.length === 0)
             return res.status(404).send({ message: "Nenhum jogo encontrado!" });

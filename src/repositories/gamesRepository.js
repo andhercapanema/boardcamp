@@ -10,6 +10,29 @@ const GamesRepository = {
         `);
         return games.rows;
     },
+    getAllGamesByFilters: async (name = "", offset, limit, order, desc) => {
+        const formattedOrder = `"${order}"`;
+
+        const foundGames = await connectionDB.query(
+            `SELECT
+                *
+            FROM
+                games
+            WHERE
+                name
+            ILIKE
+                '%' || $1 || '%'
+            ORDER BY
+                ${formattedOrder}
+            ${desc ? "DESC" : ""}
+            LIMIT
+                $2
+            OFFSET
+                $3;`,
+            [name, limit, offset]
+        );
+        return foundGames.rows;
+    },
     postNewCategory: async ({
         name,
         image,

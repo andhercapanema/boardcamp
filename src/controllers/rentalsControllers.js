@@ -24,14 +24,16 @@ export async function postRental(req, res) {
 }
 
 export async function getRentals(req, res) {
-    const { customerId, gameId, offset, limit } = req.query;
+    const { customerId, gameId, offset, limit, order, desc } = req.query;
 
     try {
         const rentals = await getAllRentalsByFilters(
             customerId,
             gameId,
             offset,
-            limit
+            limit,
+            order,
+            desc
         );
 
         const formattedCustomers = [];

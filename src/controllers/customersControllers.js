@@ -3,16 +3,9 @@ import { format } from "date-fns";
 
 const {
     postNewCustomer,
-    getAllCustomers,
-    getCustomersByCpf,
+    getAllCustomersByFilters,
     getCustomerByIdFromDb,
     updateCustomer,
-    getAllCustomersOffset,
-    getAllCustomersLimit,
-    getAllCustomersOffsetAndLimit,
-    getCustomersByCpfOffset,
-    getCustomersByCpfLimit,
-    getCustomersByCpfOffsetAndLimit,
 } = CustomersRepository;
 
 export async function postCustomer(req, res) {
@@ -28,50 +21,16 @@ export async function postCustomer(req, res) {
 }
 
 export async function getCustomers(req, res) {
-    const { cpf, offset, limit } = req.query;
-
-    const cpfDefined = cpf !== undefined;
-    const offsetDefined = offset !== undefined;
-    const limitDefined = limit !== undefined;
+    const { cpf, offset, limit, order, desc } = req.query;
 
     try {
-        let customers = [];
-
-        if (cpfDefined && offsetDefined && limitDefined) {
-            customers = await getCustomersByCpfOffsetAndLimit(
-                cpf,
-                offset,
-                limit
-            );
-        }
-
-        if (cpfDefined && offsetDefined && !limitDefined) {
-            customers = await getCustomersByCpfOffset(cpf, offset);
-        }
-
-        if (cpfDefined && !offsetDefined && limitDefined) {
-            customers = await getCustomersByCpfLimit(cpf, limit);
-        }
-
-        if (cpfDefined && !offsetDefined && !limitDefined) {
-            customers = await getCustomersByCpf(cpf);
-        }
-
-        if (!cpfDefined && offsetDefined && limitDefined) {
-            customers = await getAllCustomersOffsetAndLimit(offset, limit);
-        }
-
-        if (!cpfDefined && offsetDefined && !limitDefined) {
-            customers = await getAllCustomersOffset(offset);
-        }
-
-        if (!cpfDefined && !offsetDefined && limitDefined) {
-            customers = await getAllCustomersLimit(limit);
-        }
-
-        if (!cpfDefined && !offsetDefined && !limitDefined) {
-            customers = await getAllCustomers();
-        }
+        const customers = await getAllCustomersByFilters(
+            cpf,
+            offset,
+            limit,
+            order,
+            desc
+        );
 
         const formattedCustomer = customers.map((customer) => ({
             ...customer,

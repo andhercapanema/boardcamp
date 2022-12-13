@@ -26,31 +26,44 @@ const RentalsRepository = {
             ]
         );
     },
-    getAllRentalsByFilters: async (customerId, gameId, offset, limit) => {
-        let filter = ``;
-        let queryArr = [];
+    getAllRentalsByFilters: async (
+        customerId,
+        gameId,
+        offset,
+        limit,
+        order,
+        desc
+    ) => {
+        let whereFilter = ``;
+        let whereArr = [];
 
         if (customerId && gameId) {
-            filter = ` WHERE "customerId" = $1 AND "gameId" = $2 LIMIT $3 OFFSET $4 `;
-            queryArr = [customerId, gameId, limit, offset];
+            whereFilter = ` WHERE "customerId" = $3 AND "gameId" = $4 `;
+            whereArr = [customerId, gameId];
         } else if (customerId) {
-            filter = ` WHERE "customerId" = $1 LIMIT $2 OFFSET $3 `;
-            queryArr = [customerId, limit, offset];
+            whereFilter = ` WHERE "customerId" = $3 `;
+            whereArr = [customerId];
         } else if (gameId) {
-            filter = ` WHERE "gameId" = $1 LIMIT $2 OFFSET $3 `;
-            queryArr = [gameId, limit, offset];
-        } else {
-            filter = ` LIMIT $1 OFFSET $2 `;
-            queryArr = [limit, offset];
+            whereFilter = ` WHERE "gameId" = $3 `;
+            whereArr = [gameId];
         }
+
+        const formattedOrder = `"${order}"`;
 
         const rentals = await connectionDB.query(
             `SELECT
                 *
             FROM
                 rentals
-            ${filter};`,
-            queryArr
+            ${whereFilter}
+            ORDER BY
+                ${formattedOrder}
+            ${desc ? "DESC" : ""}
+            LIMIT
+                $1
+            OFFSET
+                $2;`,
+            [limit, offset, ...whereArr]
         );
         return rentals.rows;
     },
