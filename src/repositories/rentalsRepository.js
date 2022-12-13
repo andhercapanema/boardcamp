@@ -120,10 +120,10 @@ const RentalsRepository = {
             [id]
         );
     },
-    getTotalRevenue: async (
+    getTotalRevenue: async ({
         startDate = "1900-01-01",
-        endDate = "2100-12-31"
-    ) => {
+        endDate = "2100-12-31",
+    }) => {
         const originalRevenue = await connectionDB.query(
             `SELECT SUM ("originalPrice")
             FROM rentals
@@ -141,14 +141,19 @@ const RentalsRepository = {
             Number(delayRevenue.rows[0].sum)
         );
     },
-    getRentalsAmount: async (
+    getRentalsAmount: async ({
         startDate = "1900-01-01",
-        endDate = "2100-12-31"
-    ) => {
+        endDate = "2100-12-31",
+        game,
+        customer,
+    }) => {
         const amount = await connectionDB.query(
             `SELECT COUNT(id)
             FROM rentals
-            WHERE "rentDate" >= $1 AND "rentDate" <= $2;`,
+            WHERE "rentDate" >= $1
+            AND "rentDate" <= $2
+            AND ${game ? `"gameId" = ${game}` : 1 === 1}
+            AND ${customer ? `"customerId" = ${customer}` : 1 === 1};`,
             [startDate, endDate]
         );
         return Number(amount.rows[0].count);

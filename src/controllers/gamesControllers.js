@@ -1,17 +1,7 @@
 import GamesRepository from "../repositories/gamesRepository.js";
+import RentalsRepository from "../repositories/rentalsRepository.js";
 
-const {
-    getAllGamesByFilters,
-    getAllGames,
-    postNewCategory,
-    getGameByNameCaseInsensitive,
-    getGameByNameCaseInsensitiveLimit,
-    getGameByNameCaseInsensitiveOffset,
-    getGameByNameCaseInsensitiveOffsetAndLimit,
-    getAllGamesOffset,
-    getAllGamesLimit,
-    getAllGamesOffsetAndLimit,
-} = GamesRepository;
+const { getAllGamesByFilters, postNewCategory } = GamesRepository;
 
 export async function getGames(req, res) {
     const { name, offset, limit, order, desc } = req.query;
@@ -25,59 +15,21 @@ export async function getGames(req, res) {
             desc
         );
 
-        /* if (name !== undefined) {
-            let filteredGames = [];
-
-            if (offset === undefined) {
-                if (limit === undefined) {
-                    filteredGames = await await getGameByNameCaseInsensitive(
-                        name
-                    );
-                } else {
-                    filteredGames = await getGameByNameCaseInsensitiveLimit(
-                        name,
-                        limit
-                    );
-                }
-            } else {
-                if (limit === undefined) {
-                    filteredGames = await getGameByNameCaseInsensitiveOffset(
-                        name,
-                        offset
-                    );
-                } else {
-                    filteredGames =
-                        await getGameByNameCaseInsensitiveOffsetAndLimit(
-                            name,
-                            offset,
-                            limit
-                        );
-                }
-            }
-
-            return res.send(filteredGames);
-        }
-
-        let games = [];
-
-        if (offset === undefined) {
-            if (limit === undefined) {
-                games = await getAllGames();
-            } else {
-                games = await getAllGamesLimit(limit);
-            }
-        } else {
-            if (limit === undefined) {
-                games = await getAllGamesOffset(offset);
-            } else {
-                games = await getAllGamesOffsetAndLimit(offset, limit);
-            }
-        } */
-
         if (games.length === 0)
             return res.status(404).send({ message: "Nenhum jogo encontrado!" });
 
-        res.send(games);
+        const formattedGames = [];
+
+        for (const game of games) {
+            formattedGames.push({
+                ...game,
+                rentalsCount: await RentalsRepository.getRentalsAmount({
+                    game: game.id,
+                }),
+            });
+        }
+
+        res.send(formattedGames);
     } catch (err) {
         console.error(err);
         res.sendStatus(500);

@@ -109,8 +109,8 @@ export async function getRentalsMetrics(req, res) {
     const { startDate, endDate } = req.query;
 
     try {
-        const revenue = await getTotalRevenue(startDate, endDate);
-        const rentals = await getRentalsAmount(startDate, endDate);
+        const revenue = await getTotalRevenue({ startDate, endDate });
+        const rentals = await getRentalsAmount({ startDate, endDate });
 
         res.send({
             revenue,

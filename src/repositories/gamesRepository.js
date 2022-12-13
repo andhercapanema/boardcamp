@@ -1,15 +1,6 @@
 import connectionDB from "../database/db.js";
 
 const GamesRepository = {
-    getAllGames: async () => {
-        const games = await connectionDB.query(`
-            SELECT
-                *
-            FROM
-                games;
-        `);
-        return games.rows;
-    },
     getAllGamesByFilters: async (name = "", offset, limit, order, desc) => {
         const formattedOrder = `"${order}"`;
 
@@ -30,6 +21,7 @@ const GamesRepository = {
                 $3;`,
             [name, limit, offset]
         );
+
         return foundGames.rows;
     },
     postNewCategory: async ({
@@ -61,21 +53,6 @@ const GamesRepository = {
             [name]
         );
         return game;
-    },
-    getGameByNameCaseInsensitive: async (str) => {
-        const foundGames = await connectionDB.query(
-            `SELECT
-                *
-            FROM
-                games
-            WHERE
-                name
-            ILIKE
-                '%' || $1 || '%';
-            `,
-            [str]
-        );
-        return foundGames.rows;
     },
     getGameById: async (id) => {
         const game = await connectionDB.query(
@@ -123,94 +100,6 @@ const GamesRepository = {
             [id]
         );
         return game.rows[0];
-    },
-    getAllGamesOffset: async (offset) => {
-        const games = await connectionDB.query(
-            `SELECT
-                *
-            FROM
-                games
-            OFFSET
-                $1;`,
-            [offset]
-        );
-        return games.rows;
-    },
-    getAllGamesLimit: async (limit) => {
-        const games = await connectionDB.query(
-            `SELECT
-                *
-            FROM
-                games
-            LIMIT
-                $1;`,
-            [limit]
-        );
-        return games.rows;
-    },
-    getAllGamesOffsetAndLimit: async (offset, limit) => {
-        const games = await connectionDB.query(
-            `SELECT
-                *
-            FROM
-                games
-            LIMIT
-                $1
-            OFFSET
-                $2;`,
-            [limit, offset]
-        );
-        return games.rows;
-    },
-    getGameByNameCaseInsensitiveOffset: async (str, offset) => {
-        const foundGames = await connectionDB.query(
-            `SELECT
-                *
-            FROM
-                games
-            WHERE
-                name
-            ILIKE
-                '%' || $1 || '%'
-            OFFSET
-                $2;`,
-            [str, offset]
-        );
-        return foundGames.rows;
-    },
-    getGameByNameCaseInsensitiveLimit: async (str, limit) => {
-        const foundGames = await connectionDB.query(
-            `SELECT
-                *
-            FROM
-                games
-            WHERE
-                name
-            ILIKE
-                '%' || $1 || '%'
-            LIMIT
-                $2;`,
-            [str, limit]
-        );
-        return foundGames.rows;
-    },
-    getGameByNameCaseInsensitiveOffsetAndLimit: async (str, offset, limit) => {
-        const foundGames = await connectionDB.query(
-            `SELECT
-                *
-            FROM
-                games
-            WHERE
-                name
-            ILIKE
-                '%' || $1 || '%'
-            LIMIT
-                $2
-            OFFSET
-                $3;`,
-            [str, limit, offset]
-        );
-        return foundGames.rows;
     },
 };
 

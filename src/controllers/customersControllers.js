@@ -1,5 +1,6 @@
 import CustomersRepository from "../repositories/customersRepository.js";
 import { format } from "date-fns";
+import RentalsRepository from "../repositories/rentalsRepository.js";
 
 const {
     postNewCustomer,
@@ -32,10 +33,17 @@ export async function getCustomers(req, res) {
             desc
         );
 
-        const formattedCustomer = customers.map((customer) => ({
-            ...customer,
-            birthday: format(customer.birthday, "yyyy-MM-dd"),
-        }));
+        const formattedCustomer = [];
+
+        for (const customer of customers) {
+            formattedCustomer.push({
+                ...customer,
+                birthday: format(customer.birthday, "yyyy-MM-dd"),
+                rentalsCount: await RentalsRepository.getRentalsAmount({
+                    customer: customer.id,
+                }),
+            });
+        }
 
         res.send(formattedCustomer);
     } catch (err) {
