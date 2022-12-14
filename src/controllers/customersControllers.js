@@ -72,9 +72,7 @@ export async function getCustomerById(req, res) {
 
 export async function putCustomer(req, res) {
     const { id } = req.params;
-    const { name, phone, cpf, birthday } = req.body;
-
-    const updatedCustomer = { name, phone, cpf, birthday };
+    const updatedCustomer = res.locals.newCustomer;
 
     try {
         await updateCustomer(id, updatedCustomer);

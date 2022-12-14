@@ -2,7 +2,9 @@ import connectionDB from "../database/db.js";
 
 const CategoriesRepository = {
     getAllCategoriesByFilter: async (limit, offset, order, desc) => {
-        const orderBy = order ? `ORDER BY ${order}` : "";
+        const orderBy = ["id", "name"].includes(order)
+            ? `ORDER BY ${order}`
+            : "";
 
         const categories = await connectionDB.query(
             `SELECT

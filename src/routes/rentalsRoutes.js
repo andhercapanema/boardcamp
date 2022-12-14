@@ -26,6 +26,7 @@ router.post(
 );
 router.get("/", getRentals);
 router.get("/metrics", getRentalsMetrics);
+
 router.use("/:id", rentalIdExistsValidation);
 
 router.post("/:id/return", rentalWasNotReturnedValidation, returnGame);

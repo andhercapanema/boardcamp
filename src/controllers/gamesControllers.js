@@ -1,7 +1,7 @@
 import GamesRepository from "../repositories/gamesRepository.js";
 import RentalsRepository from "../repositories/rentalsRepository.js";
 
-const { getAllGamesByFilters, postNewCategory } = GamesRepository;
+const { getAllGamesByFilters, postNewGame } = GamesRepository;
 
 export async function getGames(req, res) {
     const { name, offset, limit, order, desc } = req.query;
@@ -40,7 +40,7 @@ export async function postGame(req, res) {
     const { newCategory } = res.locals;
 
     try {
-        await postNewCategory(newCategory);
+        await postNewGame(newCategory);
         res.sendStatus(201);
     } catch (err) {
         console.error(err);

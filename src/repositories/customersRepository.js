@@ -12,7 +12,11 @@ const CustomersRepository = {
         );
     },
     getAllCustomersByFilters: async (offset, limit, order, desc, cpf = "") => {
-        const orderBy = order ? `ORDER BY ${order}` : "";
+        const orderBy = ["id", "name", "phone", "cpf", "birthday"].includes(
+            order
+        )
+            ? `ORDER BY ${order}`
+            : "";
 
         const filteredCustomers = await connectionDB.query(
             `SELECT

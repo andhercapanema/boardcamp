@@ -2,16 +2,29 @@ import connectionDB from "../database/db.js";
 
 const GamesRepository = {
     getAllGamesByFilters: async (offset, limit, order, desc, name = "") => {
-        const formattedOrder = `"${order}"`;
-        const orderBy = order ? `ORDER BY ${formattedOrder}` : "";
+        const formattedOrder = `g."${order}"`;
+        const orderBy = [
+            "id",
+            "name",
+            "image",
+            "stockTotal",
+            "categoryId",
+            "pricePerDay",
+        ].includes(order)
+            ? `ORDER BY ${formattedOrder}`
+            : "";
 
         const foundGames = await connectionDB.query(
             `SELECT
-                *
+                g.*, c.name AS "categoryName"
             FROM
-                games
+                games AS g
+            JOIN
+                categories AS c
+            ON
+                g."categoryId" = c.id
             WHERE
-                name
+                g.name
             ILIKE
                 '%' || $1 || '%'
             ${orderBy}
@@ -25,7 +38,7 @@ const GamesRepository = {
 
         return foundGames.rows;
     },
-    postNewCategory: async ({
+    postNewGame: async ({
         name,
         image,
         stockTotal,

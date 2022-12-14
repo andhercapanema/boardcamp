@@ -33,7 +33,7 @@ const RentalsRepository = {
         limit,
         order,
         desc,
-        startDate
+        startDate = "1900-01-01"
     ) => {
         let customerAndGameFilter = ``;
         let customerAndGameArr = [];
@@ -50,7 +50,18 @@ const RentalsRepository = {
         }
 
         const formattedOrder = `"${order}"`;
-        const orderBy = order ? `ORDER BY ${formattedOrder}` : "";
+        const orderBy = [
+            "id",
+            "customerId",
+            "gameId",
+            "rentDate",
+            "daysRented",
+            "returnDate",
+            "originalPrice",
+            "delayFee",
+        ].includes(order)
+            ? `ORDER BY ${formattedOrder}`
+            : "";
 
         const rentals = await connectionDB.query(
             `SELECT
@@ -94,14 +105,14 @@ const RentalsRepository = {
         );
     },
     updateRentalDelayFee: async (id) => {
-        const game = await RentalsRepository.getRentalById(id);
+        const rental = await RentalsRepository.getRentalById(id);
 
         const daysActuallyRented = differenceInDays(
             startOfToday(),
-            game.rentDate
+            rental.rentDate
         );
-        const daysOfDelay = daysActuallyRented - game.daysRented;
-        const pricePerDay = game.originalPrice / game.daysRented;
+        const daysOfDelay = daysActuallyRented - rental.daysRented;
+        const pricePerDay = rental.originalPrice / rental.daysRented;
         const delayFee = daysOfDelay > 0 ? daysOfDelay * pricePerDay : 0;
 
         await connectionDB.query(

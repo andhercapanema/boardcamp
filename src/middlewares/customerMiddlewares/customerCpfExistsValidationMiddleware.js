@@ -9,8 +9,8 @@ export default async function customerCpfExistsValidation(req, res, next) {
     try {
         const customer = await CustomersRepository.getCustomerByCpf(cpf);
         const cpfAlreadyExists = customer.rowCount > 0;
-        const isUpdatingTheSameCustomer = customer.rows[0]?.id === +id;
         const isPostingRepeatedCpf = methodIsPost && cpfAlreadyExists;
+        const isUpdatingTheSameCustomer = customer.rows[0]?.id === +id;
         const isUpdatingCpfToAnExistingOne =
             methodIsPut && cpfAlreadyExists && !isUpdatingTheSameCustomer;
 
